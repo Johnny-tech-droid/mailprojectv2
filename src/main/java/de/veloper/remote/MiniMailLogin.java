@@ -1,14 +1,13 @@
 package de.veloper.remote;
 
 import jakarta.mail.*;
-import org.kordamp.ikonli.Ikon;
 import org.kordamp.ikonli.swing.FontIcon;
 
 import javax.swing.*;
 import java.awt.*;
 import java.util.Properties;
 
-import static org.kordamp.ikonli.materialdesign2.MaterialDesignL.LOGIN;
+import static org.kordamp.ikonli.material2.Material2OutlinedAL.LOGIN;
 
 
 /**
@@ -18,10 +17,10 @@ import static org.kordamp.ikonli.materialdesign2.MaterialDesignL.LOGIN;
 public class MiniMailLogin extends JDialog {
     // die Variablen für die Logindaten
     private JTextField benutzerFeld;
-    private JButton loginBtn;
     private JPasswordField passwortFeld;
     // die eigenschaften für die Verbindung mit dem Server
     private Properties smtpProperties;
+    private JLabel infoLabel;
 
     /**
      * Konstruktor für das MiniMail-Login-Fenster.
@@ -43,20 +42,29 @@ public class MiniMailLogin extends JDialog {
         setLayout(borderLayout);
         borderLayout.setHgap(10);
         borderLayout.setVgap(10);
+        add(infoLabelPanel(), BorderLayout.NORTH);
         JPanel inputPanel = createInputPanel();
 
-        add(inputPanel, BorderLayout.NORTH);
-        JPanel loginBtnPanel = createLoginButton();
-        add(loginBtnPanel, BorderLayout.CENTER);
+        add(inputPanel, BorderLayout.CENTER);
+        JPanel loginBtnPanel = createLoginButtonPanel();
+        add(loginBtnPanel, BorderLayout.SOUTH);
         setTitle("MiniMail Login");
         setSize(380, 150);
         setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
         setLocationRelativeTo(null);
         setLocationByPlatform(true);
         setVisible(true);
-        add(new Label(), BorderLayout.SOUTH);
+
 
         setResizable(false);
+
+    }
+    private JPanel infoLabelPanel() {
+        JPanel tempPanel = new JPanel();
+        infoLabel = new JLabel("");
+        infoLabel.setForeground(Color.RED);
+        tempPanel.add(infoLabel);
+        return tempPanel;
 
     }
 
@@ -68,14 +76,15 @@ public class MiniMailLogin extends JDialog {
     private JPanel createInputPanel() {
         JPanel inputPanel = new JPanel();
 
-
         GridLayout gridLayout = new GridLayout(0,2);
+        gridLayout.setVgap(10);
+        gridLayout.setHgap(10);
+
         inputPanel.setLayout(gridLayout);
 
         JLabel benutzerLabel = new JLabel("Benutzer:");
         benutzerFeld = new JTextField();
         benutzerFeld.setColumns(20);
-
 
         JLabel passwortLabel = new JLabel("Passwort:");
         passwortFeld = new JPasswordField();
@@ -88,6 +97,7 @@ public class MiniMailLogin extends JDialog {
 
         return inputPanel;
     }
+
 
     /**
      * Authentifiziert den Benutzer über die SMTP-Verbindung.
@@ -110,7 +120,7 @@ public class MiniMailLogin extends JDialog {
             transport.close();
             return true;
         } catch (MessagingException e) {
-            System.err.println("ERROR");
+            e.printStackTrace();
             return false;
         }
     }
@@ -122,42 +132,41 @@ public class MiniMailLogin extends JDialog {
 
         String smtpServer = Constants.getSmtpServer();
         String smtpPort = Constants.getSmtpPort();
-        smtpProperties = createProperties(smtpServer, smtpPort, "mail.smtp");
+        smtpProperties = createProperties(smtpServer, smtpPort);
     }
 
     /**
      * Erstellt die Eigenschaften für die Verbindung.
      *
-     * @param host           Hostname des Servers.
-     * @param port           Port des Servers.
-     * @param protocolPrefix Präfix für das Protokoll.
+     * @param host Hostname des Servers.
+     * @param port Port des Servers.
      * @return Die erstellten Eigenschaften.
      */
-    private Properties createProperties(String host, String port, String protocolPrefix) {
+    private Properties createProperties(String host, String port) {
         Properties properties = new Properties();
-        properties.put(protocolPrefix + ".auth", true);
-        properties.put(protocolPrefix + ".starttls.enable", true);
-        properties.put(protocolPrefix + ".host", host);
-        properties.put(protocolPrefix + ".port", port);
+        properties.put("mail.smtp.auth", true);
+        properties.put("mail.smtp.starttls.enable", true);
+        properties.put("mail.smtp.host", host);
+        properties.put("mail.smtp.port", port);
         return properties;
     }
 
-    private JButton createButton(Ikon iconEnum, String tooltiptext) {
+    private JButton createLoginButton() {
         JButton tempButton = new JButton();
         FontIcon tempIcon = new FontIcon();
-        tempIcon.setIkon(iconEnum);
+        tempIcon.setIkon(LOGIN);
         tempIcon.setIconSize(25);
         tempButton.setIcon(tempIcon);
 
-        tempButton.setToolTipText(tooltiptext);
+        tempButton.setToolTipText("Jetzt einloggen");
         return tempButton;
     }
 
-    private JPanel createLoginButton() {
+    private JPanel createLoginButtonPanel() {
         JPanel tempPanel = new JPanel();
         GridLayout gridLayout = new GridLayout(0,3);
         tempPanel.setLayout(gridLayout);
-        loginBtn = createButton(LOGIN, "Jetzt einloggen");
+        JButton loginBtn = createLoginButton();
         loginBtn.addActionListener(e -> checkForAuthentication());
 
         tempPanel.add(new JLabel());
@@ -176,6 +185,7 @@ public class MiniMailLogin extends JDialog {
             dispose();
         } else {
             System.err.println("FAILURE");
+            infoLabel.setText("Eingabe ungültig.\n E-Mail-Adresse oder Passwort falsch.");
         }
     }
 }

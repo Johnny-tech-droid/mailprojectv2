@@ -25,7 +25,7 @@ public class Empfangen extends JFrame {
     private JTable tabelle;
     private DefaultTableModel modell;
 
-    private JButton antwortenBtn, weiterleitenBtn, syncBtn, homeBtn;
+
     /**
      * Benutzername und Kennwort sollen nicht mehr fest im Code hinterlegt werden,
      * sondern von außen geladen werden. Durch eine Eingabe von TextFeld bzw. PasswortFeld
@@ -67,15 +67,12 @@ public class Empfangen extends JFrame {
      */
     public Empfangen() {
         super();
+        initGui();
+
+    }
+    private void initGui() {
         setTitle("E-Mail empfangen");
         setLayout(new BorderLayout());
-
-        MeinListener listener = new MeinListener();
-        antwortenBtn = createButton(REPLY, "Antwortet auf die ausgewählte E-Mail.", "antworten", listener);
-        weiterleitenBtn = createButton(FORWARD_TO_INBOX, "Leitet die ausgewählte E-Mail weiter.", "weiterleiten", listener);
-        homeBtn = createButton(HOME_OUTLINE, "Zurück zum Hauptmenü.", "home", listener);
-        syncBtn = createButton(DATABASE_SYNC_OUTLINE, "Posteingang synchronisieren.", "syncMailbox", listener);
-
 
         add(symbolleiste(), BorderLayout.NORTH);
         setVisible(true);
@@ -87,6 +84,7 @@ public class Empfangen extends JFrame {
         tabelleAktualisieren();
     }
 
+    // Neue Methode um Icons zu initialisieren
     private FontIcon createFontIcon(Ikon name) {
         FontIcon tempIcon = new FontIcon();
         tempIcon.setIkon(name);
@@ -94,7 +92,7 @@ public class Empfangen extends JFrame {
 
         return tempIcon;
     }
-
+    // Neue Methode um Buttons zu erstellen.
     private JButton createButton(Ikon name, String beschreibung, String actionCommand, ActionListener listener) {
         JButton tempButton = new JButton();
         FontIcon fontIcon = createFontIcon(name);
@@ -117,6 +115,12 @@ public class Empfangen extends JFrame {
      */
     private JToolBar symbolleiste() {
         JToolBar leiste = new JToolBar();
+        MeinListener listener = new MeinListener();
+        JButton antwortenBtn = createButton(REPLY, "Antwortet auf die ausgewählte E-Mail.", "antworten", listener);
+        JButton weiterleitenBtn = createButton(FORWARD_TO_INBOX, "Leitet die ausgewählte E-Mail weiter.", "weiterleiten", listener);
+        JButton homeBtn = createButton(HOME_OUTLINE, "Zurück zum Hauptmenü.", "home", listener);
+        JButton syncBtn = createButton(DATABASE_SYNC_OUTLINE, "Posteingang synchronisieren.", "syncMailbox", listener);
+
         // die Symbole über die Aktionen einbauen
         leiste.add(homeBtn);
         leiste.add(syncBtn);
@@ -153,7 +157,7 @@ public class Empfangen extends JFrame {
             MiniDBTools.schliessenDB(Constants.getDB_URL());
         } catch (SQLException e) {
             e.printStackTrace();
-            e.toString();
+
         }
     }
 
@@ -248,7 +252,7 @@ public class Empfangen extends JFrame {
             posteingang.close(true);
         } catch (Exception e) {
             e.printStackTrace();
-            e.toString();
+
         }
     }
 
@@ -280,7 +284,7 @@ public class Empfangen extends JFrame {
                                 + "kann nicht verarbeitet werden.");
         } catch (Exception e) {
             e.printStackTrace();
-            e.toString();
+
         }
     }
 
@@ -316,7 +320,7 @@ public class Empfangen extends JFrame {
             MiniDBTools.schliessenDB(Constants.getDB_URL());
         } catch (Exception e) {
             e.printStackTrace();
-            System.err.println(e);
+
         }
     }
 
@@ -343,7 +347,7 @@ public class Empfangen extends JFrame {
      * ausgewählten Nachricht. Aktualisiert anschließend die Tabelle.
      */
 
-
+    // TEILAUFGABE Nr.2
     public void processSelectedRow(String prefix) {
         int selectedRow = tabelle.getSelectedRow();
         if (selectedRow >= 0) {

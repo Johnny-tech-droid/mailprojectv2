@@ -203,7 +203,7 @@ public class NeueNachricht extends JDialog {
 
         return scroll;
     }
-
+    // Diese Methode erstellt ein Panel mit 2 Buttons
     private JPanel createButtonPanel() {
         JPanel panel = new JPanel();
         NeuListener listener = new NeuListener();
@@ -216,7 +216,7 @@ public class NeueNachricht extends JDialog {
         return panel;
     }
 
-
+    // Diese Methode erstellt einen JButton mit einem Icon, einem actionCommand, einem Listener und dem tooltipText
     private JButton createButton(Ikon iconEnum, String actionCommand, NeuListener actionListener, String toolTipText) {
         JButton tempButton = new JButton();
         FontIcon tempIcon = new FontIcon();

@@ -5,31 +5,14 @@ import org.kordamp.ikonli.swing.FontIcon;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
+
 
 import static org.kordamp.ikonli.materialdesign2.MaterialDesignE.EMAIL_RECEIVE_OUTLINE;
 import static org.kordamp.ikonli.materialdesign2.MaterialDesignE.EMAIL_SEND_OUTLINE;
 import static org.kordamp.ikonli.materialdesign2.MaterialDesignL.LOGOUT;
 
 public class MiniMailStart extends JFrame {
-    class MeinListener implements ActionListener {
 
-        @Override
-        public void actionPerformed(ActionEvent e) {
-
-            switch(e.getActionCommand()) {
-                case "senden" -> senden();
-                case "empfangen" -> empfangen();
-                case "ende" -> beenden();
-                case "test" -> getSizeForMenu();
-            }
-        }
-    }
-
-    private void getSizeForMenu() {
-        System.out.println(this.getSize());
-    }
 
     public MiniMailStart(String title) throws HeadlessException {
         super(title);
@@ -46,21 +29,25 @@ public class MiniMailStart extends JFrame {
     private JPanel createButtonPanel() {
         JPanel tempPanel = new JPanel();
         tempPanel.setLayout(new GridLayout(0,3));
-        MeinListener listener = new MeinListener();
+
 
         JButton postausgang = createButton(EMAIL_SEND_OUTLINE,
-                "senden", listener,
+                "senden",
                 "Öffnet den Posteingang und synchronisiert diesen.",
                 "Gesendete E-Mails");
+        postausgang.addActionListener(e -> empfangen());
+
         JButton posteingang = createButton(EMAIL_RECEIVE_OUTLINE,
-                "empfangen", listener,
+                "empfangen",
                 "Öffnet die gesendeten E-Mails.",
                 "Empfangene E-Mails");
+        posteingang.addActionListener(e-> senden());
+
         JButton ausloggen = createButton(LOGOUT,
-                "ende", listener,
+                "ende",
                 "User ausloggen und Programm beenden.",
                 "Programm beenden");
-
+        ausloggen.addActionListener(e -> beenden());
         tempPanel.add(posteingang);
         tempPanel.add(postausgang);
         tempPanel.add(ausloggen);
@@ -70,12 +57,11 @@ public class MiniMailStart extends JFrame {
     }
 
 
-    private JButton createButton(Ikon iconEnum, String actionCommand, ActionListener actionListener, String toolTipText, String text) {
+    private JButton createButton(Ikon iconEnum, String actionCommand, String toolTipText, String text) {
         JButton tempButton = new JButton();
         FontIcon fontIcon = createFontIcon(iconEnum);
         tempButton.setIcon(fontIcon);
         tempButton.setActionCommand(actionCommand);
-        tempButton.addActionListener(actionListener);
         tempButton.setToolTipText(toolTipText);
         tempButton.setText(text);
         tempButton.setBorderPainted(false);
