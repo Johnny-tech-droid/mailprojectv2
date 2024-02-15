@@ -1,5 +1,6 @@
 package de.veloper.remote;
 
+
 import org.kordamp.ikonli.Ikon;
 import org.kordamp.ikonli.swing.FontIcon;
 
@@ -23,8 +24,7 @@ public class Senden extends JFrame {
 
     private JTable tabelle;
     private DefaultTableModel modell;
-    //    private MeineAktionen homeAct;
-    private FontIcon sendenIcon, homeIcon;
+
     class MausListener implements MouseListener {
 
         @Override
@@ -35,9 +35,11 @@ public class Senden extends JFrame {
                 //die Daten beschaffen
                 String empfaenger, betreff, inhalt, ID;
                 ID = tabelle.getModel().getValueAt(zeile, 0).toString();
+
                 empfaenger = tabelle.getModel().getValueAt(zeile, 1).toString();
                 betreff = tabelle.getModel().getValueAt(zeile, 2).toString();
                 inhalt = tabelle.getModel().getValueAt(zeile, 3).toString();
+
                 //und anzeigen
                 //übergeben wird der Frame der äußeren Klasse
                 new Anzeige(Senden.this, true, ID, empfaenger, betreff, inhalt, false);
@@ -73,7 +75,7 @@ public class Senden extends JFrame {
 
             switch (e.getActionCommand()) {
                 case "senden" -> senden();
-                case "home" -> dispose();
+                case "home" -> nachHause();
             }
         }
     }
@@ -93,6 +95,7 @@ public class Senden extends JFrame {
 
     public Senden() {
         super();
+
         setTitle("E-Mail senden");
         setLayout(new BorderLayout());
         MeinSendenListener listener = new MeinSendenListener();

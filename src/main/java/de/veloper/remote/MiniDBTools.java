@@ -9,27 +9,30 @@ public class MiniDBTools {
     //zurückgeliefert wird ein Connection-Objekt
     //übergeben werden Argumente für das Öffnen
     public static Connection oeffnenDB(String arg) {
-        Connection verbindung = null;
+
         try {
             //die Datenbank ist adressenDB
-            verbindung = DriverManager.getConnection(arg);
+            return DriverManager.getConnection(arg);
         } catch (Exception e) {
             JOptionPane.showMessageDialog(null, "Problem: \n" + e.toString());
+            return null;
         }
-        return verbindung;
+
     }
 
     //die Methode liefert eine Ergebnismenge
     //übergeben wird die Verbindung und der SQL-Ausdruck
     public static ResultSet liefereErgebnis(Connection verbindung, String sqlAnweisung) {
-        ResultSet ergebnisMenge = null;
+
         try {
             Statement state = verbindung.createStatement(ResultSet.TYPE_SCROLL_SENSITIVE, ResultSet.CONCUR_UPDATABLE);
-            ergebnisMenge = state.executeQuery(sqlAnweisung);
+            ResultSet ergebnisMenge = state.executeQuery(sqlAnweisung);
+            return ergebnisMenge;
         } catch (Exception e) {
             JOptionPane.showMessageDialog(null, "Problem: \n" + e.toString());
+            return null;
         }
-        return ergebnisMenge;
+
     }
 
     //die Methode fährt das gesamte Datenbanksystem herunter

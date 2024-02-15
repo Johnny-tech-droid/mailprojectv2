@@ -1,5 +1,6 @@
 package de.veloper.remote;
 
+
 import jakarta.mail.*;
 import org.kordamp.ikonli.Ikon;
 import org.kordamp.ikonli.swing.FontIcon;
@@ -23,6 +24,7 @@ import static org.kordamp.ikonli.materialdesign2.MaterialDesignH.HOME_OUTLINE;
 public class Empfangen extends JFrame {
     private JTable tabelle;
     private DefaultTableModel modell;
+
     private JButton antwortenBtn, weiterleitenBtn, syncBtn, homeBtn;
     /**
      * Benutzername und Kennwort sollen nicht mehr fest im Code hinterlegt werden,
@@ -177,6 +179,7 @@ public class Empfangen extends JFrame {
                     int zeile = tabelle.getSelectedRow();
                     String sender, betreff, inhalt, ID;
                     ID = tabelle.getModel().getValueAt(zeile, 0).toString();
+
                     sender = tabelle.getModel().getValueAt(zeile, 1).toString();
                     betreff = tabelle.getModel().getValueAt(zeile, 2).toString();
                     inhalt = tabelle.getModel().getValueAt(zeile, 3).toString();
@@ -326,18 +329,12 @@ public class Empfangen extends JFrame {
      * füllt automatisch den Empfänger, den Betreff und den Inhalt mit den entsprechenden Werten der
      * ausgewählten Nachricht. Aktualisiert anschließend die Tabelle.
      */
+
     public void antworten() {
-        int selectedRow = tabelle.getSelectedRow();
-        if (selectedRow >= 0) {
-            String empfaenger = tabelle.getModel().getValueAt(selectedRow, 1).toString();
-            String betreff = "AW: " + tabelle.getModel().getValueAt(selectedRow, 2).toString();
-            String orgInhalt = tabelle.getModel().getValueAt(selectedRow, 3).toString();
-            String inhalt = "\n\n------- Text der ursprünglichen Nachricht --------\n" + orgInhalt;
-            new NeueNachricht(this, true, empfaenger, betreff, inhalt);
-            tabelleAktualisieren();
-        } else {
-            JOptionPane.showMessageDialog(this, "Eine Nachricht anklicken um zu antworten!");
-        }
+        processSelectedRow("AW: ");
+    }
+    public void weiterleiten() {
+        processSelectedRow("WG: ");
     }
 
     /**
@@ -345,18 +342,27 @@ public class Empfangen extends JFrame {
      * füllt automatisch den Betreff und den Inhalt mit den entsprechenden Werten der
      * ausgewählten Nachricht. Aktualisiert anschließend die Tabelle.
      */
-    public void weiterleiten() {
+
+
+    public void processSelectedRow(String prefix) {
         int selectedRow = tabelle.getSelectedRow();
         if (selectedRow >= 0) {
-
-            String betreff = "WG: " + tabelle.getModel().getValueAt(selectedRow, 2).toString();
+            String empfaenger = prefix.equals("AW: ") ? tabelle.getModel().getValueAt(selectedRow, 1).toString() : "";
+            String betreff = prefix + tabelle.getModel().getValueAt(selectedRow, 2).toString();
             String orgInhalt = tabelle.getModel().getValueAt(selectedRow, 3).toString();
             String inhalt = "\n\n------- Text der ursprünglichen Nachricht --------\n" + orgInhalt;
-            new NeueNachricht(this, true, betreff, inhalt);
+            new NeueNachricht(this, true, empfaenger, betreff, inhalt);
             tabelleAktualisieren();
         } else {
-            JOptionPane.showMessageDialog(this, "Eine Nachricht anklicken für weiterleiten.");
+            String message = prefix.equals("AW: ")
+                    ? "Eine Nachricht anklicken um zu antworten"
+                    : "Eine Nachricht anklicken fuer weiterleiten";
+
+            JOptionPane.showMessageDialog(this, message);
         }
     }
+
+
+
 
 }
