@@ -23,6 +23,7 @@ public class Anzeige extends JDialog {
     private Boolean replyBtnShow;
 
 
+
     //die innere Klasse für den ActionListener
     class NeuListener implements ActionListener {
         @Override

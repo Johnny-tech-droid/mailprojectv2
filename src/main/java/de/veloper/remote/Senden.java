@@ -25,6 +25,7 @@ public class Senden extends JFrame {
     private JTable tabelle;
     private DefaultTableModel modell;
 
+
     class MausListener implements MouseListener {
 
         @Override
@@ -101,10 +102,11 @@ public class Senden extends JFrame {
         MeinSendenListener listener = new MeinSendenListener();
 
 
-        emailVerfassenBtn = createButton(EMAIL_EDIT_OUTLINE, "senden", listener, "Erstellt eine neue E-Mail.");
-        backToMenuBtn = createButton(HOME_OUTLINE, "home", listener, "Zurück zum Hauptmenü.");
+        emailVerfassenBtn = createButton(EMAIL_EDIT_OUTLINE, "senden", listener,"Erstellt eine neue E-Mail.");
+        backToMenuBtn = createButton(HOME_OUTLINE, "home",listener,"Zurück zum Hauptmenü.");
 
         add(symbolleiste(), BorderLayout.NORTH);
+
         setVisible(true);
         setSize(700, 300);
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);

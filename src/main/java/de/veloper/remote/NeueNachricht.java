@@ -26,6 +26,7 @@ public class NeueNachricht extends JDialog {
     private final String benutzername = Constants.getBENUTZERNAME();
     private final String passwort = Constants.getPASSWORT();
 
+
     // die innere Klasse für den ActionListener
     class NeuListener implements ActionListener {
 
@@ -214,6 +215,7 @@ public class NeueNachricht extends JDialog {
 
         return panel;
     }
+
 
     private JButton createButton(Ikon iconEnum, String actionCommand, NeuListener actionListener, String toolTipText) {
         JButton tempButton = new JButton();
