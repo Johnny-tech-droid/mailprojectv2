@@ -30,24 +30,23 @@ public class MiniMailStart extends JFrame {
         JPanel tempPanel = new JPanel();
         tempPanel.setLayout(new GridLayout(0,3));
 
-
         JButton postausgang = createButton(EMAIL_SEND_OUTLINE,
                 "senden",
                 "Öffnet den Posteingang und synchronisiert diesen.",
                 "Gesendete E-Mails");
-        postausgang.addActionListener(e -> empfangen());
-
         JButton posteingang = createButton(EMAIL_RECEIVE_OUTLINE,
                 "empfangen",
                 "Öffnet die gesendeten E-Mails.",
                 "Empfangene E-Mails");
-        posteingang.addActionListener(e-> senden());
-
         JButton ausloggen = createButton(LOGOUT,
                 "ende",
                 "User ausloggen und Programm beenden.",
                 "Programm beenden");
+
+        postausgang.addActionListener(e -> empfangen());
+        posteingang.addActionListener(e-> senden());
         ausloggen.addActionListener(e -> beenden());
+
         tempPanel.add(posteingang);
         tempPanel.add(postausgang);
         tempPanel.add(ausloggen);

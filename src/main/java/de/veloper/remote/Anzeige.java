@@ -5,8 +5,6 @@ import org.kordamp.ikonli.swing.FontIcon;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 
 import static org.kordamp.ikonli.material2.Material2OutlinedAL.CANCEL;
 import static org.kordamp.ikonli.material2.Material2OutlinedAL.FORWARD_TO_INBOX;
@@ -20,30 +18,14 @@ public class Anzeige extends JDialog {
     //für die Schaltflächen
     private JButton cancelBtn, antwortenBtn, weiterleitenBtn;
     private JPanel replyBtnPanel, forwardBtnPanel, cancelBtnPanel;
-    private Boolean replyBtnShow;
-
-
+    private final Boolean replyBtnShow;
 
     //die innere Klasse für den ActionListener
-    class NeuListener implements ActionListener {
-        @Override
-        public void actionPerformed(ActionEvent e) {
 
-            switch (e.getActionCommand()) {
-                case "ok" -> dispose(); //dann Dialog schließen
-                case "antworten" -> antworten(); //dann antworten
-                case "weiterleiten" -> weiterleiten(); //dann weiterleiten
-            }
-
-        }
-    }
 
     // AUFGABE 2 EINSENDEAUFGABE JAVA17D
     // antworten und weiterleiten Methoden sind abgewandelt von empfangenInstanz.getTabelle()stellen() für das Anzeigen
     // einer empfangenen Nachricht
-
-
-
 
     //der Konstruktor
     public Anzeige(JFrame parent, boolean modal, String ID, String empfaenger, String betreff, String inhalt, Boolean replyBtnBool) {
@@ -57,42 +39,38 @@ public class Anzeige extends JDialog {
         setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
     }
 
-
-
     private void initGui(String iD, String empfaenger, String betreff, String inhalt) {
-
-
         setLayout(new BorderLayout());
-        NeuListener listener = new NeuListener();
 
         JPanel oben = createTopPanel(empfaenger, betreff);
         add(oben, BorderLayout.NORTH);
-        inhaltFeld = new JTextArea(inhalt);
-        //den Zeilenumbruch aktivieren
-        inhaltFeld.setWrapStyleWord(true);
-        inhaltFeld.setLineWrap(true);
+        inhaltFeld = initTextArea(inhalt);
         //das Feld setzen wir in ein Scrollpane
-        JScrollPane scroll = new JScrollPane(inhaltFeld);
-        scroll.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
+        JScrollPane scroll = createScrollPane(inhaltFeld);
         add(scroll, BorderLayout.CENTER);
         //die Felder können nicht bearbeitet werden
         empfaengerFeld.setEditable(false);
         betreffFeld.setEditable(false);
         inhaltFeld.setEditable(false);
-
-        JPanel unten = createBottomPanel(listener);
-
         //die Schaltfläche
-
-        add(unten, BorderLayout.SOUTH);
+        add(createBottomPanel(), BorderLayout.SOUTH);
         //anzeigen
         setSize(600, 300);
         setVisible(true);
+    }
+    private JTextArea initTextArea(String inhalt) {
+        inhaltFeld = new JTextArea(inhalt);
+        inhaltFeld.setLineWrap(true);
 
+        return inhaltFeld;
+    }
+    private JScrollPane createScrollPane(JTextArea textArea) {
+        JScrollPane scrollPane = new JScrollPane(textArea);
+        scrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
+        return scrollPane;
     }
     private JPanel createTopPanel(String empfaenger, String betreff) {
         JPanel tempPanel = new JPanel();
-
         tempPanel.setLayout(new GridLayout(0, 2));
         tempPanel.add(new JLabel("Empfänger: "));
         empfaengerFeld = new JTextField(empfaenger);
@@ -100,49 +78,49 @@ public class Anzeige extends JDialog {
         tempPanel.add(new JLabel("Betreff: "));
         betreffFeld = new JTextField(betreff);
         tempPanel.add(betreffFeld);
-
-
         return tempPanel;
     }
 
-    private JPanel createBottomPanel(NeuListener listener) {
+    private JPanel createBottomPanel() {
         JPanel tempPanel = new JPanel();
         tempPanel.setLayout(new GridLayout(0,3));
-        cancelBtn = createButton(CANCEL, "ok", listener, "Abbrechen");
+        cancelBtn = createButton(CANCEL, "ok", "Abbrechen");
+        cancelBtn.addActionListener(e -> dispose());
+
         cancelBtnPanel = createPanel(cancelBtn);
         tempPanel.add(cancelBtnPanel);
-        antwortenBtn = createButton(REPLY, "antworten", listener, "Antworten");
+        antwortenBtn = createButton(REPLY, "antworten", "Antworten");
+        antwortenBtn.addActionListener(e -> antworten());
+
         replyBtnPanel = createPanel(antwortenBtn);
+        // hiermit wird geprüft, ob es sich um eine gesendete oder empfangene
+        // bei gesendeten E-Mails wird die boolean variable auf false gesetzt, sonst true
         if (replyBtnShow)
             tempPanel.add(replyBtnPanel);
-        weiterleitenBtn = createButton(FORWARD_TO_INBOX, "weiterleiten", listener, "Weiterleiten");
+        weiterleitenBtn = createButton(FORWARD_TO_INBOX, "weiterleiten", "Weiterleiten");
+        weiterleitenBtn.addActionListener(e -> weiterleiten());
+
         forwardBtnPanel = createPanel(weiterleitenBtn);
         tempPanel.add(forwardBtnPanel);
         return tempPanel;
     }
-
-
-
     private JPanel createPanel(JButton panelButton) {
         JPanel tempPanel = new JPanel();
         tempPanel.setLayout(new BorderLayout());
         tempPanel.add(panelButton, BorderLayout.NORTH);
         return tempPanel;
     }
-
-
-    private JButton createButton(Ikon iconEnum, String actionCommand, NeuListener actionListener, String buttonText) {
+    private JButton createButton(Ikon iconEnum, String actionCommand, String buttonText) {
         JButton tempButton = new JButton();
         FontIcon tempIcon = new FontIcon();
         tempIcon.setIkon(iconEnum);
         tempIcon.setIconSize(25);
         tempButton.setIcon(tempIcon);
         tempButton.setActionCommand(actionCommand);
-        tempButton.addActionListener(actionListener);
         tempButton.setText(buttonText);
-
         return tempButton;
     }
+
     public void antworten() {
         String empfaenger = empfaengerFeld.getText();
         String betreff = "AW: " + betreffFeld.getText();

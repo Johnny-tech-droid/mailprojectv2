@@ -20,8 +20,8 @@ public class MiniDBTools {
 
     }
 
-    //die Methode liefert eine Ergebnismenge
-    //übergeben wird die Verbindung und der SQL-Ausdruck
+    // die Methode liefert eine Ergebnismenge
+    // übergeben wird die Verbindung und der SQL-Ausdruck
     public static ResultSet liefereErgebnis(Connection verbindung, String sqlAnweisung) {
 
         try {
@@ -46,7 +46,7 @@ public class MiniDBTools {
         } catch (SQLException e) {
             erfolg = true;
         }
-        if (erfolg != true)
+        if (!erfolg)
             JOptionPane.showMessageDialog(null, "Das DBMS konnte nicht heruntergefahren werden.");
     }
 }

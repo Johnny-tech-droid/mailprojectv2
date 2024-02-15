@@ -49,7 +49,7 @@ public class MiniMailLogin extends JDialog {
         JPanel loginBtnPanel = createLoginButtonPanel();
         add(loginBtnPanel, BorderLayout.SOUTH);
         setTitle("MiniMail Login");
-        setSize(380, 150);
+        setSize(380, 200);
         setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
         setLocationRelativeTo(null);
         setLocationByPlatform(true);
@@ -94,7 +94,7 @@ public class MiniMailLogin extends JDialog {
         inputPanel.add(benutzerFeld);
         inputPanel.add(passwortLabel);
         inputPanel.add(passwortFeld);
-
+        inputPanel.setSize(100,110);
         return inputPanel;
     }
 

@@ -360,7 +360,7 @@ public class Empfangen extends JFrame {
         } else {
             String message = prefix.equals("AW: ")
                     ? "Eine Nachricht anklicken um zu antworten"
-                    : "Eine Nachricht anklicken fuer weiterleiten";
+                    : "Eine Nachricht anklicken für weiterleiten";
 
             JOptionPane.showMessageDialog(this, message);
         }
