@@ -23,7 +23,7 @@ public class NeueNachricht extends JDialog {
     private JTextField empfaenger, betreff;
     private JTextArea inhalt;
     // die Variablen als Platzhalter der Logindaten
-    private final String benutzername = Constants.getBENUTZERNAME();
+    private static final String benutzername = Constants.getBENUTZERNAME();
     private final String passwort = Constants.getPASSWORT();
 
 
