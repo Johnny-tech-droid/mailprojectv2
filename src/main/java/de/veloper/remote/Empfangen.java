@@ -334,6 +334,7 @@ public class Empfangen extends JFrame {
      * ausgewählten Nachricht. Aktualisiert anschließend die Tabelle.
      */
 
+
     public void antworten() {
         processSelectedRow("AW: ");
     }
